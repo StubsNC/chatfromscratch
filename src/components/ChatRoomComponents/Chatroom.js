@@ -1,22 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, limitToLast } from 'firebase/firestore';
-import { db, auth } from '../firebase-config';
+import { db, auth } from '../../firebase-config';
 import { Button } from 'react-bootstrap';
 import { Link, Route, Routes, Outlet } from 'react-router-dom';
-import ChatSettingsTab from './ChatSettingsTab';
 import MessagesList from './MessagesList';
 import Header from './Header';
 import ChatForm from './ChatForm';
+import ChatModal from './ChatModal';
 
 const ChatRoom = (props) => {
     const { room } = props;
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([])
     const [videos, setVideos] = useState([])
+    const [gamertags, setGamertags] = useState([])
     const messagesEndRef = useRef(null)
 
     const messagesRef = collection(db, "messagesChat");
-    const videoRef = collection(db, "server_jobs")
+    const videoRef = collection(db, "messageChat")
 
     useEffect(() => {
         const queryMessages = query(
@@ -38,15 +39,19 @@ const ChatRoom = (props) => {
     useEffect(() => {
         const videosQuery = query(
             videoRef,
-            orderBy("createdAt", "desc"),
-            limitToLast(20)
+            // orderBy("createdAt", "desc"),
+            // limitToLast(20)
         );
         const unsubscribe = onSnapshot(videosQuery, (snapshot) => {
             let videoUrls = [];
+            let gamertags = [];
             snapshot.forEach((doc) => {
-                videoUrls.push(doc.data().public_url);
+                videoUrls.push({ ...doc.data().public_url, id: doc.id });
+                // gamertags.push(doc.data().gamertag);
             });
             setVideos(videoUrls);
+            setGamertags(gamertags);
+            console.log(gamertags)
         });
         return () => unsubscribe();
     }, []);
@@ -70,16 +75,14 @@ const ChatRoom = (props) => {
     }, [messages])
 
     return (
-        <div className="container mx-auto m-3">
+        <div className="container mx-auto m-3 ">
             <Header room={room} />
-            {/* <div>
-                <Link className="btn btn-primary" to="/ChatSettingsTab">Settings</Link>
-            </div> */}
-            <MessagesList messages={messages} videos={videos} messagesEndRef={messagesEndRef} />
+            
+            <ChatModal />
+            
+            <MessagesList messages={messages} videos={videos} gamertags={gamertags} messagesEndRef={messagesEndRef} />
+            
             <ChatForm handleSubmit={handleSubmit} newMessage={newMessage} setNewMessage={setNewMessage} />
-            {/* <Routes>
-                <Route path="/ChatSettingsTab" element={<ChatSettingsTab />} />
-            </Routes> */}
         </div>
     )
 }

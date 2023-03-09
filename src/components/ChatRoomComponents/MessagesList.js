@@ -7,10 +7,12 @@ const MessageList = ({ messages, videos }) => {
                 <div className="message mx-3 mb-3" key={message.id}>
                     <span className="user text-primary">{message.user}: </span>
                     {message.text}
-                    {videos.map((videoUrl) => (
-                        <video src={videoUrl} className="px-1" style={{ height: "70px", width: "100px" }} controls></video>
-                    ))}
+
                 </div>
+            ))}
+            <span className="user text-primary">{videos.gamertag}:</span>
+            {videos.map((videoUrl) => (
+                <video src={videoUrl} className="px-1" style={{ height: "70px", width: "100px" }} controls></video>
             ))}
         </div>
     );

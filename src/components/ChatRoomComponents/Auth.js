@@ -1,4 +1,4 @@
-import { auth, provider } from "../firebase-config";
+import { auth, provider } from "../../firebase-config";
 import { signInWithPopup } from "firebase/auth";
 
 import Cookies from 'universal-cookie';

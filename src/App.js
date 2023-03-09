@@ -1,13 +1,11 @@
 import React, { useState, useRef } from "react";
-import { Auth } from "./components/Auth";
-import Chat from "./UnusedShit/Chat";
-import { Button, Row, Col, Container } from 'react-bootstrap';
+import { Auth } from "./components/ChatRoomComponents/Auth";
+import {  Row, Col, Container } from 'react-bootstrap';
+
 
 
 import Cookies from 'universal-cookie';
-// import ChatPractice from "./components/chatPractice";
-// import ChatPractice2 from "./components/chatPractice2";
-import ChatRoom from "./components/Chatroom";
+import ChatRoom from "./components/ChatRoomComponents/Chatroom";
 const cookies = new Cookies()
 
 
@@ -25,11 +23,11 @@ function App() {
   }
 
   return (
-    <div>
+    <>
       {room ? (
         <ChatRoom room={room} />
       ) : (
-        <Container className="p-5">
+        <Container className="p-5 bg-light">
           <div className="container border border-primary border-3 rounded p-2">
             <Row className="font-weight-bold text-justify p-2 align-items-center">
               <Col xs={4}>
@@ -49,7 +47,7 @@ function App() {
           </div>
         </Container>
       )}
-    </div>
+    </>
 
   )
 }
